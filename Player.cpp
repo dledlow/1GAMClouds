@@ -5,6 +5,10 @@ Player::Player() : Entity(0,0)
 {
 	r = PLANETSIZE+10;
 	laserActive = false;
+	isDead = false;
+	radius = 10;
+	scoreBoard = new ScoreCounter(10, 10);
+	clock.restart();
 }
 
 
@@ -15,6 +19,7 @@ Player::~Player()
 
 void Player::Update(sf::Window* window, std::list<Entity*>* eList)
 {
+	killsSinceLastTick = 0;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		dtheta = std::min(dtheta + acceleration, maxAngVelo);
@@ -39,7 +44,7 @@ void Player::Update(sf::Window* window, std::list<Entity*>* eList)
 			laserEndPoint = mousePos;
 			laserEndPoint.x = 1000.0f * (laserEndPoint.x - x) + x;
 			laserEndPoint.y = 1000.0f * (laserEndPoint.y - y) + y;
-			UpdateLaserCollisions(eList);	// only collide if we havent blocked the shot with the planet
+			DetectLaserCollisions(eList);	// only collide if we havent blocked the shot with the planet
 		}
 		else{
 			laserEndPoint = intPoint;
@@ -47,13 +52,18 @@ void Player::Update(sf::Window* window, std::list<Entity*>* eList)
 
 		laserActive = true;
 	}
+	DetectFatalCollisions(eList);
+	scoreBoard->addMultiplier(clock.restart().asSeconds());
+	scoreBoard->addScore(killsSinceLastTick);
+	scoreBoard->Update();
+
 }
 
 
 void Player::Render(sf::RenderWindow* window)
 {
-	sf::CircleShape shape(10, 7);
-	shape.setOrigin(10, 10);
+	sf::CircleShape shape(radius, 7);
+	shape.setOrigin(radius, radius);
 	shape.setRotation(theta);
 	shape.setPosition(x, y);
 	window->draw(shape);
@@ -67,6 +77,7 @@ void Player::Render(sf::RenderWindow* window)
 
 		window->draw(line, 2, sf::Lines);
 	}
+	scoreBoard->Render(window);
 }
 
 
@@ -75,15 +86,30 @@ sf::Vector2i Player::findIntersectingPoint(sf::Vector2i mousePos){
 }
 
 
-void Player::UpdateLaserCollisions(std::list<Entity*>* eList){
+void Player::DetectLaserCollisions(std::list<Entity*>* eList){
 	std::list<Entity*>::iterator it = eList->begin();
 	while (it != eList->end()) {
 		if ((*it)->CollisionType & CollisionTypes::KILLABLE){
 			sf::Vector2i* hitPoint = &collideCircleWithLine(sf::Vector2i((*it)->x, (*it)->y), (*it)->radius, laserEndPoint, sf::Vector2i(x, y));
 			if (hitPoint->x != -1 || hitPoint->y != -1){
 				(*it)->pendingDelete = true;
+				killsSinceLastTick++;
 			}
 		}
 		++it;
 	}
 }
+
+
+void Player::DetectFatalCollisions(std::list<Entity*>* eList){
+	std::list<Entity*>::iterator it = eList->begin();
+	while (it != eList->end()) {
+		if ((*it)->CollisionType & CollisionTypes::DANGEROUS){
+			if (distance((*it)->x, (*it)->y, x, y) <= (*it)->radius + radius){
+				scoreBoard->reset();
+			}
+		}
+		++it;
+	}
+}
+

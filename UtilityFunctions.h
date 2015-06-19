@@ -23,6 +23,14 @@ static float dotf(sf::Vector2f v1, sf::Vector2f v2){
 	return v1.x * v2.x + v1.y * v2.y;
 }
 
+static float distance(int p1x, int p1y, int p2x, int p2y) {
+	return sqrt(pow(p1x-p2x, 2) + pow(p1y-p2y, 2));
+}
+
+static float distance(sf::Vector2i p1, sf::Vector2i p2) {
+	return distance(p1.x, p1.y, p2.x, p2.y);
+}
+
 static sf::Vector2i collideCircleWithLine(sf::Vector2i circlePos, float circleRadius, sf::Vector2i lineP1, sf::Vector2i lineP2) {
 	//http://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
 	// compute the euclidean distance between A and B

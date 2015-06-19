@@ -4,7 +4,8 @@
 
 enum CollisionTypes {
 	NOCOLLIDE = 0,
-	KILLABLE = 1
+	KILLABLE = 1,
+	DANGEROUS = 2
 };
 
 class Entity

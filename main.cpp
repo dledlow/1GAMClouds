@@ -5,6 +5,7 @@
 std::list<Entity*> eList;
 CloudSpawner csp(&eList);
 sf::Texture* planetTex;
+Player* player;
 
 void doStuff(sf::RenderWindow* window){
 	csp.Update();
@@ -45,9 +46,10 @@ int main()
 	settings.antialiasingLevel = 8;
 
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "SFML works!", sf::Style::Default, settings);
-	window.setFramerateLimit(120);
+	window.setFramerateLimit(144);
 
-	eList.push_front(new Player());
+	player = new Player();
+	eList.push_front(player);
 
 	planetTex = new sf::Texture();
 	planetTex->loadFromFile("Assets/Planet1.png");
