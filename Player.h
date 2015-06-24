@@ -14,6 +14,8 @@ public:
 	void DetectLaserCollisions(std::list<Entity*>* eList);
 	void DetectFatalCollisions(std::list<Entity*>* eList);
 
+	void reset();
+
 	bool laserActive;
 	bool isDead;
 
@@ -25,6 +27,7 @@ public:
 
 	ScoreCounter* scoreBoard;
 	sf::Clock clock;
+	sf::CircleShape shape;
 
 private:
 	sf::Vector2i findIntersectingPoint(sf::Vector2i);

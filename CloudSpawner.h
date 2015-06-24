@@ -9,6 +9,7 @@ public:
 	~CloudSpawner();
 
 	void Update();
+	void reset();
 
 	float spawnRate = 1;
 	float dangerSpawnRate = 0.01;

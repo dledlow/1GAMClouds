@@ -25,6 +25,7 @@ public:
 	float radius = 30;
 	const float drag = 0;
 	int CollisionType = 0;
+	sf::String* type = new sf::String("");
 
 	sf::Vector2f v;
 	sf::Vector2f a;

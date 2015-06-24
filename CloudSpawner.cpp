@@ -24,3 +24,8 @@ void CloudSpawner::Update()
 		eList->push_front(new DangerCloud(randf() * 360, 0, randf() + 0.5f));
 	}
 }
+
+void CloudSpawner::reset() {
+	spawnRate = 1;
+	dangerSpawnRate = 0.01;
+}

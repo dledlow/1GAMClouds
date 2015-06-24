@@ -10,9 +10,10 @@ Cloud::Cloud() : Entity(0, 0)
 		tex->loadFromFile("Assets/Cloud.png");
 	}
 
+	type = new sf::String("cloud");
 	r = 1000;
 
-	shape = sf::CircleShape(radius, 10);
+	shape = sf::CircleShape(radius, 5);
 	//shape.setFillColor(sf::Color::Magenta);
 	shape.setTexture(tex);
 	shape.setOrigin(radius, radius);
@@ -38,6 +39,7 @@ void Cloud::Update(sf::Window* window, std::list<Entity*>* eList)
 	r -= fallSpeed;
 	if (r < PLANETSIZE){
 		pendingDelete = true;
+		type = new sf::String("didDamage");
 	}
 
 	theta += dtheta;

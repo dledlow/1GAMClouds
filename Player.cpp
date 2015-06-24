@@ -1,14 +1,24 @@
 #include "Player.h"
 
+static sf::Texture* tex;
 
 Player::Player() : Entity(0,0)
 {
-	r = PLANETSIZE+10;
+	if (tex == NULL) {
+		tex = new sf::Texture();
+		tex->loadFromFile("Assets/Player.png");
+	}
+
 	laserActive = false;
 	isDead = false;
 	radius = 10;
+	r = PLANETSIZE + radius;
 	scoreBoard = new ScoreCounter(10, 10);
 	clock.restart();
+
+	shape = sf::CircleShape(radius+10, 10);
+	shape.setTexture(tex);
+	shape.setOrigin(radius+5, radius+5);
 }
 
 
@@ -62,8 +72,6 @@ void Player::Update(sf::Window* window, std::list<Entity*>* eList)
 
 void Player::Render(sf::RenderWindow* window)
 {
-	sf::CircleShape shape(radius, 7);
-	shape.setOrigin(radius, radius);
 	shape.setRotation(theta);
 	shape.setPosition(x, y);
 	window->draw(shape);
@@ -106,10 +114,17 @@ void Player::DetectFatalCollisions(std::list<Entity*>* eList){
 	while (it != eList->end()) {
 		if ((*it)->CollisionType & CollisionTypes::DANGEROUS){
 			if (distance((*it)->x, (*it)->y, x, y) <= (*it)->radius + radius){
-				scoreBoard->reset();
+				isDead = true;
 			}
 		}
 		++it;
 	}
 }
 
+void Player::reset() {
+	clock.restart();
+	theta = 0;
+	dtheta = 0;
+	scoreBoard->reset();
+	isDead = false;
+}
