@@ -83,7 +83,7 @@ int main()
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
 
-	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "SFML works!", sf::Style::Default, settings);
+	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "Clouds", sf::Style::Default, settings);
 	window.setFramerateLimit(144);
 
 	player = new Player();

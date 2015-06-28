@@ -79,10 +79,10 @@ void Player::Render(sf::RenderWindow* window)
 	if (laserActive){
 		sf::Vertex line[] =
 		{
-			sf::Vertex(sf::Vector2f(x, y)),
-			sf::Vertex(sf::Vector2f(float(laserEndPoint.x),float(laserEndPoint.y)))
+			sf::Vertex(sf::Vector2f(x, y),sf::Color::Red),
+			sf::Vertex(sf::Vector2f(float(laserEndPoint.x), float(laserEndPoint.y)), sf::Color::Blue)
 		};
-
+		
 		window->draw(line, 2, sf::Lines);
 	}
 	scoreBoard->Render(window);
